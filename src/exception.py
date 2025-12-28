@@ -1,7 +1,9 @@
 import sys
 import traceback
 from typing import Any, Optional
-from src.logger import logging
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 def error_message_detail(error: Exception, error_detail: Optional[Any] = None) -> str:
     """
@@ -32,9 +34,10 @@ class CustomException(Exception):
         self.original_exception = error
         self.error_message = error_message_detail(error, error_detail=error_detail)
         # optionally log the exception with traceback
-        logging.error(self.error_message)
+        logger.error(self.error_message)
         # If you want the full stack trace logged:
-        logging.debug("".join(traceback.format_exception(* (error_detail.exc_info() if error_detail else sys.exc_info()))))
+        logger.debug("".join(traceback.format_exception(* (error_detail.exc_info() if error_detail else sys.exc_info()))))
 
     def __str__(self) -> str:
         return self.error_message
+    
